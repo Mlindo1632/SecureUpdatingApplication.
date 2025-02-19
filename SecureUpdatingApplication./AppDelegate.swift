@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  SecureUpdatingApplication.
 //
-//  Created by Nhlanhla Kubayi on 2025/01/24.
+//  Created by Lindokuhle Khumalo on 2025/01/24.
 //
 
 import UIKit
@@ -14,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        Thread.sleep(forTimeInterval: 4.5)
         return true
     }
 
