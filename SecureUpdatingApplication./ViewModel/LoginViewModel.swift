@@ -39,11 +39,8 @@ class LoginViewModel {
         if email.isEmpty {
             delegate?.didUpdateEmailValidation(isValid: false, errorMessage: "Email  cannot be empty.")
             return
-        }
-        
-        if !email.hasSuffix("@reqres.in") {
+        } else if !email.hasSuffix("@reqres.in") {
             delegate?.didUpdateEmailValidation(isValid: false, errorMessage: "Please enter a vaild email address")
-            return
         }
         
         let emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
@@ -60,9 +57,7 @@ class LoginViewModel {
     private func validatePassword() {
         if password.isEmpty {
             delegate?.didUpdatePasswordValidation(isValid: false, errorMessage: "Password cannot be empty")
-        }
-        
-        if password.count < 6 {
+        } else if password.count < 6 {
             delegate?.didUpdatePasswordValidation(isValid: false, errorMessage: "Password needs to be at least 6 characters. ")
         } else {
             delegate?.didUpdatePasswordValidation(isValid: true, errorMessage: nil)

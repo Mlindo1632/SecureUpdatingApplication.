@@ -12,6 +12,7 @@ protocol LoginServiceCallProtocol {
 }
 
 struct LoginServiceCall: LoginServiceCallProtocol {
+    
     func loginUser(email: String, password: String) {
         let endpoint = Bundle.main.object(forInfoDictionaryKey: "ReqresLoginDetails") as! String
         
