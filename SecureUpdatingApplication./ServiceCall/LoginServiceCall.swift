@@ -14,7 +14,12 @@ protocol LoginServiceCallProtocol {
 struct LoginServiceCall: LoginServiceCallProtocol {
     
     func loginUser(email: String, password: String) {
-        let endpoint = Bundle.main.object(forInfoDictionaryKey: "ReqresLoginDetails") as! String
+        guard let plistPath = Bundle.main.path(forResource: "ReqResAPIs", ofType: "plist"),
+           let plistData = FileManager.default.contents(atPath: plistPath),
+           let plist = try? PropertyListSerialization.propertyList(from: plistData, options: [], format: nil) as? [String: Any],
+           let endpoint = plist["ReqResLoginDetails"] as? String else {
+            return
+        }
         
         let parameters: [String: Any] = ["email": email, "password": password]
         
