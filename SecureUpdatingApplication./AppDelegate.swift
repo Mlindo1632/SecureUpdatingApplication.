@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         Thread.sleep(forTimeInterval: 4.5)
         return true
+        
     }
 
     // MARK: UISceneSession Lifecycle
