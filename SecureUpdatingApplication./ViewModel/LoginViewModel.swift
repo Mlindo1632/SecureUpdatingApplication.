@@ -9,15 +9,13 @@ import Foundation
 
 
 protocol LoginViewModelDelegate: AnyObject {
-    func didSuccessfullyLogin(loginTokenModel: LoginTokenModel )
-    func didFailLogin(error: Error)
     func didUpdateEmailValidation(isValid: Bool, errorMessage: String?)
     func didUpdatePasswordValidation(isValid: Bool, errorMessage: String?)
     func didUpdateFormValidation(isValid: Bool)
 }
 
-
 class LoginViewModel {
+    
     
     private let loginServiceCallProtocol: LoginServiceCallProtocol
     
@@ -37,8 +35,8 @@ class LoginViewModel {
     private func validateEmail() {
         
         if email.isEmpty {
-            delegate?.didUpdateEmailValidation(isValid: false, errorMessage: "Email  cannot be empty.")
-            return
+            delegate?.didUpdateEmailValidation(isValid: false, errorMessage: "Email cannot be empty.")
+            
         } else if !email.hasSuffix("@reqres.in") {
             delegate?.didUpdateEmailValidation(isValid: false, errorMessage: "Please enter a vaild email address")
         }
@@ -47,7 +45,7 @@ class LoginViewModel {
         let isValid = NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
         
         if !isValid {
-            delegate?.didUpdateEmailValidation(isValid: false, errorMessage: "Invalid Email format. ")
+            delegate?.didUpdateEmailValidation(isValid: false, errorMessage: "Invalid email format.")
         } else {
             delegate?.didUpdateEmailValidation(isValid: true, errorMessage: nil)
         }
@@ -58,7 +56,7 @@ class LoginViewModel {
         if password.isEmpty {
             delegate?.didUpdatePasswordValidation(isValid: false, errorMessage: "Password cannot be empty")
         } else if password.count < 6 {
-            delegate?.didUpdatePasswordValidation(isValid: false, errorMessage: "Password needs to be at least 6 characters. ")
+            delegate?.didUpdatePasswordValidation(isValid: false, errorMessage: "Password needs to be at least 6 characters.")
         } else {
             delegate?.didUpdatePasswordValidation(isValid: true, errorMessage: nil)
         }
@@ -74,15 +72,5 @@ class LoginViewModel {
     
     func loginUser(email: String, password: String) {
         loginServiceCallProtocol.loginUser(email: email, password: password)
-    }
-    
-    func loginResponse(result: Result<LoginTokenModel, APIError>) {
-        switch result {
-        case .success(let user):
-            self.delegate?.didSuccessfullyLogin(loginTokenModel: user)
-            
-        case .failure(let error):
-            self.delegate?.didFailLogin(error: error)
-        }
     }
 }

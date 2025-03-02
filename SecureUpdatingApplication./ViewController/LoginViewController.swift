@@ -22,11 +22,11 @@ class LoginViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         loginViewModel?.delegate = self
+        NetworkManager.shared.delegate = self
         
         loginView.emailTextField.addTarget(self, action: #selector(emailDidChange), for: .editingChanged)
         loginView.passwordTextField.addTarget(self, action: #selector(passwordDidChange), for: .editingChanged)
@@ -42,17 +42,13 @@ class LoginViewController: UIViewController {
     }
     
     @objc private func loginButtonPressed() {
-        guard let email = loginView.emailTextField.text, let password = loginView.passwordTextField.text else { return }
+        loginView.activityIndicator.isHidden = false
+        loginView.activityIndicator.startAnimating()
+        
+        guard let email = loginView.emailTextField.text?.lowercased(), let password = loginView.passwordTextField.text else { return }
         
         loginViewModel?.loginUser(email: email, password: password)
-        
     }
-    
-//    func setupViewModel() {
-//        loginViewModel = LoginViewModel(loginServiceCallProtocol: LoginServiceCall() as LoginServiceCallProtocol)
-//    }
-    
-    
 }
 
 extension LoginViewController: LoginViewModelDelegate {
@@ -77,14 +73,23 @@ extension LoginViewController: LoginViewModelDelegate {
     func didUpdateFormValidation(isValid: Bool) {
         loginView.loginButton.isEnabled = isValid
     }
-    
-    func didSuccessfullyLogin(loginTokenModel: LoginTokenModel) {
-        print("Login successful. Login token is \(loginTokenModel.token)")
-        
+}
+
+extension LoginViewController: NetworkManagerDelegate {
+    func didDecodeData<T>(_ data: T) where T : Decodable {
+        DispatchQueue.main.async {
+            self.loginView.activityIndicator.stopAnimating()
+            self.loginView.activityIndicator.hidesWhenStopped = true
+            print("Successfully decoded Token. Token is \(data)")
+        }
     }
     
-    func didFailLogin(error: Error) {
-        
+    func didFail(_ error: APIError) {
+        DispatchQueue.main.async {
+            self.loginView.activityIndicator.stopAnimating()
+            self.loginView.activityIndicator.hidesWhenStopped = true
+            print("Password or Email may be incorrect. Please try again")
+        }
     }
 }
 

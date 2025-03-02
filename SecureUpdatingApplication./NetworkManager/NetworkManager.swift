@@ -10,6 +10,8 @@ import Foundation
 class NetworkManager: NetworkManagerProtocol {
     static let shared = NetworkManager()
     
+    weak var delegate: NetworkManagerDelegate?
+    
     private init() {}
     
     func request<T: Codable>(
@@ -51,8 +53,10 @@ class NetworkManager: NetworkManagerProtocol {
             do {
                 let decodedData = try JSONDecoder().decode(T.self, from: data)
                 completion(.success(decodedData))
+                self.delegate?.didDecodeData(decodedData)
             } catch {
                 completion(.failure(.decodingFailed))
+                self.delegate?.didFail(.decodingFailed)
             }
         }.resume()
     }

@@ -29,17 +29,12 @@ struct LoginServiceCall: LoginServiceCallProtocol {
                                       headers: nil
         ) {(result: Result<LoginTokenModel, APIError>) in
             switch result {
-            case .success(let response):
-                print("Post Success \(response)")
+            case .success( _):
+                print("Post Success")
             case .failure(let error):
                 print("Error: \(error)")
             }
         }
     }
 }
-
-/*guard let path = Bundle.main.path(forResource: "ReqResAPIs", ofType: "plist") else {return}
-let endpoint = URL(string: <#T##String#>: path)
-let data = try! Data(contentsOf: endpoint)
-guard let plist = try! PropertyListSerialization.propertyList(from: data, options: .mutableContainers, format: nil) as? String else {return}*/
 
