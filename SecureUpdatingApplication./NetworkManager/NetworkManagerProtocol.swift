@@ -14,7 +14,6 @@ enum APIError: Error {
     case unknownError
 }
 
-
 enum HTTPMethod: String {
     case get = "GET"
     case post = "POST"
@@ -31,6 +30,7 @@ protocol NetworkManagerProtocol {
         completion: @escaping (Result<T, APIError>) -> Void
     )
 }
+
 protocol NetworkManagerDelegate: AnyObject {
     func didDecodeData<T: Decodable>(_ data: T)
     func didFail(_ error: APIError)

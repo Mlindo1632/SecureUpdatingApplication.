@@ -77,19 +77,14 @@ extension LoginViewController: LoginViewModelDelegate {
 
 extension LoginViewController: NetworkManagerDelegate {
     func didDecodeData<T>(_ data: T) where T : Decodable {
-        DispatchQueue.main.async {
-            self.loginView.activityIndicator.stopAnimating()
-            self.loginView.activityIndicator.hidesWhenStopped = true
-            print("Successfully decoded Token. Token is \(data)")
-        }
+        SecureAcivityIndicator.stopAndHideActivityIndicator(loginView.activityIndicator)
+        print("Successfully Logged in. Token is \(data)")
     }
     
     func didFail(_ error: APIError) {
-        DispatchQueue.main.async {
-            self.loginView.activityIndicator.stopAnimating()
-            self.loginView.activityIndicator.hidesWhenStopped = true
-            print("Password or Email may be incorrect. Please try again")
-        }
+        SecureAcivityIndicator.stopAndHideActivityIndicator(loginView.activityIndicator)
+        print("Password or Email may be incorrect. Please try again")
+        SecureAlertController.showAlert(on: self, message: "Password or Email may be incorrect. Please try again", title: "OK")
     }
 }
 

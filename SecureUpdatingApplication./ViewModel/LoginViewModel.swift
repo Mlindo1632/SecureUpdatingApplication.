@@ -2,7 +2,7 @@
 //  LoginViewModel.swift
 //  SecureUpdatingApplication.
 //
-//  Created by Nhlanhla Kubayi on 2025/01/28.
+//  Created by Lindokuhle Khumalo on 2025/01/28.
 //
 
 import Foundation
