@@ -46,7 +46,6 @@ class LoginViewController: UIViewController {
         loginView.activityIndicator.startAnimating()
         
         guard let email = loginView.emailTextField.text?.lowercased(), let password = loginView.passwordTextField.text else { return }
-        
         loginViewModel?.loginUser(email: email, password: password)
     }
 }
@@ -79,12 +78,15 @@ extension LoginViewController: NetworkManagerDelegate {
     func didDecodeData<T>(_ data: T) where T : Decodable {
         SecureAcivityIndicator.stopAndHideActivityIndicator(loginView.activityIndicator)
         print("Successfully Logged in. Token is \(data)")
+        SecureNavigation.navigate(from: self, to: EmployeViewController.self)
+        SecureTextFieldAndButtonManager.clearAndDisable(textFieldOne: loginView.emailTextField, textFieldTwo: loginView.passwordTextField, button: loginView.loginButton)
     }
     
     func didFail(_ error: APIError) {
         SecureAcivityIndicator.stopAndHideActivityIndicator(loginView.activityIndicator)
-        print("Password or Email may be incorrect. Please try again")
-        SecureAlertController.showAlert(on: self, message: "Password or Email may be incorrect. Please try again", title: "OK")
+        print("password or email may be incorrect. Please try again")
+        SecureAlertController.showAlert(on: self, message: "password or email may be incorrect. Please try again", title: "OK")
+        SecureTextFieldAndButtonManager.clearAndDisable(textFieldOne: loginView.emailTextField, textFieldTwo: loginView.passwordTextField, button: loginView.loginButton)
     }
 }
 
