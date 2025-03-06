@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class SecureAlertController {
+struct SecureAlertController {
     
     static func showAlert(on viewcontroller: UIViewController, message: String?, title: String?) {
         DispatchQueue.main.async {

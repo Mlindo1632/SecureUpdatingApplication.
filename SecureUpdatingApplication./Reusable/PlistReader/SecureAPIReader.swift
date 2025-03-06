@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SecureAPIReader {
+struct SecureAPIReader {
     
     static func readValue(key: String) -> String? {
         guard let plistPath = Bundle.main.path(forResource: "ReqResAPIs", ofType: "plist"),

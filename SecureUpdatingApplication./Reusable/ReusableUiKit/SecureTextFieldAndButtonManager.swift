@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-class SecureTextFieldAndButtonManager {
+struct SecureTextFieldAndButtonManager {
+    
     static func clearAndDisable(textFieldOne: UITextField, textFieldTwo: UITextField, button: UIButton) {
         DispatchQueue.main.async {
             textFieldOne.text?.removeAll()

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class SecureNavigation {
+struct SecureNavigation {
     
     static func navigate(from currentVC: UIViewController,to viewcontrollerType: UIViewController.Type) {
         DispatchQueue.main.async {
