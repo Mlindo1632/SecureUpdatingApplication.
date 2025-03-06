@@ -12,7 +12,6 @@ protocol LoginServiceCallProtocol {
 }
 
 struct LoginServiceCall: LoginServiceCallProtocol {
-    
     func loginUser(email: String, password: String) {
         let endpoint = SecureAPIReader.readValue(key: "ReqResLoginDetails")!
         
@@ -25,7 +24,7 @@ struct LoginServiceCall: LoginServiceCallProtocol {
         ) {(result: Result<LoginTokenModel, APIError>) in
             switch result {
             case .success( _):
-                print("Post Success")
+                print("Decoding success")
             case .failure(let error):
                 print("Error: \(error)")
             }

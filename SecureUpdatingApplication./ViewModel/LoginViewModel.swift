@@ -15,8 +15,6 @@ protocol LoginViewModelDelegate: AnyObject {
 }
 
 class LoginViewModel {
-    
-    
     private let loginServiceCallProtocol: LoginServiceCallProtocol
     
     weak var delegate: LoginViewModelDelegate?
