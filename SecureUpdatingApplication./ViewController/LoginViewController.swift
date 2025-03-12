@@ -28,8 +28,8 @@ class LoginViewController: UIViewController {
         loginViewModel?.delegate = self
         NetworkManager.shared.delegate = self
         
-        loginView.emailTextField.addTarget(self, action: #selector(emailDidChange), for: .editingChanged)
-        loginView.passwordTextField.addTarget(self, action: #selector(passwordDidChange), for: .editingChanged)
+        loginView.emailTextField.addTarget(self, action: #selector(emailDidChange), for: .allEditingEvents)
+        loginView.passwordTextField.addTarget(self, action: #selector(passwordDidChange), for: .allEditingEvents)
         loginView.loginButton.addTarget(self, action: #selector(loginButtonPressed), for: .touchUpInside)
     }
     
