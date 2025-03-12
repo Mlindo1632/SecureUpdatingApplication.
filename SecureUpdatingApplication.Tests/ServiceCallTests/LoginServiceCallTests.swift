@@ -2,34 +2,70 @@
 //  LoginServiceCallTests.swift
 //  SecureUpdatingApplication.Tests
 //
-//  Created by Nhlanhla Kubayi on 2025/03/12.
+//  Created by Lindokuhle Khumalo on 2025/03/12.
 //
 
 import XCTest
+@testable import SecureUpdatingApplication_
 
 final class LoginServiceCallTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    var mockNetworkManager: MockNetworkManager!
+    var loginService: LoginServiceCall!
+    
+    override func setUp() {
+        super.setUp()
+        mockNetworkManager = MockNetworkManager()
+        loginService = LoginServiceCall(networkManager: mockNetworkManager)
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func testDecodingLoginTokenModelSuccess() {
+        mockNetworkManager.shouldSuccesed = true
+        
+        loginService.loginUser(email: "JamesFredricks@reqres.in", password: "Pass190E")
+        
+        XCTAssertEqual(mockNetworkManager.capturedEndpoint, SecureAPIReader.readValue(key: "ReqResLoginDetails"))
+        XCTAssertEqual(mockNetworkManager.capturedParameters?["email"] as? String, "JamesFredricks@reqres.in")
+        XCTAssertEqual(mockNetworkManager.capturedParameters?["password"] as? String, "Pass190E")
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    func testLoginTokenModelFailure() {
+        mockNetworkManager.shouldSuccesed = false
+        
+        loginService.loginUser(email: "JamesFredricks@reqres.in", password: "Fail190E")
+        
+        XCTAssertEqual(mockNetworkManager.capturedEndpoint, SecureAPIReader.readValue(key: "ReqResLoginDetails"))
+        XCTAssertEqual(mockNetworkManager.capturedParameters?["email"] as? String, "JamesFredricks@reqres.in")
+        XCTAssertEqual(mockNetworkManager.capturedParameters?["password"] as? String, "Fail190E")
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    func testDecodingLoginModelFailureWhenEmailIsNotGiven() {
+        mockNetworkManager.shouldSuccesed = false
+        
+        loginService.loginUser(email: "", password: "Pass190E")
+        
+        XCTAssertEqual(mockNetworkManager.capturedEndpoint, SecureAPIReader.readValue(key: "ReqResLoginDetails"))
+        XCTAssertEqual(mockNetworkManager.capturedParameters?["email"] as? String, "")
+        XCTAssertEqual(mockNetworkManager.capturedParameters?["password"] as? String, "Pass190E")
     }
+    
+    func testDecodingLoginModelFailureWhenPasswordIsNotGiven() {
+        mockNetworkManager.shouldSuccesed = false
+        
+        loginService.loginUser(email: "Fredricks@reqres.in", password: "")
+        
+        XCTAssertEqual(mockNetworkManager.capturedEndpoint, SecureAPIReader.readValue(key: "ReqResLoginDetails"))
+        XCTAssertEqual(mockNetworkManager.capturedParameters?["email"] as? String, "Fredricks@reqres.in")
+        XCTAssertEqual(mockNetworkManager.capturedParameters?["password"] as? String, "")
+    }
+    
+    func testDecodingLoginModelFailureWhenEmailAndPasswordAreNotGiven() {
+        mockNetworkManager.shouldSuccesed = false
+        
+        loginService.loginUser(email: "", password: "")
+        
+        XCTAssertEqual(mockNetworkManager.capturedEndpoint, SecureAPIReader.readValue(key: "ReqResLoginDetails"))
+        XCTAssertEqual(mockNetworkManager.capturedParameters?["email"] as? String, "")
+        XCTAssertEqual(mockNetworkManager.capturedParameters?["password"] as? String, "")
 
+    }
 }
