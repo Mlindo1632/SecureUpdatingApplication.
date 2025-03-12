@@ -31,19 +31,10 @@ class LoginViewModel {
     }
     
     private func validateEmail() {
-        
         if email.isEmpty {
             delegate?.didUpdateEmailValidation(isValid: false, errorMessage: "Email cannot be empty.")
-            
         } else if !email.hasSuffix("@reqres.in") {
             delegate?.didUpdateEmailValidation(isValid: false, errorMessage: "Please enter a vaild email address")
-        }
-        
-        let emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
-        let isValid = NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
-        
-        if !isValid {
-            delegate?.didUpdateEmailValidation(isValid: false, errorMessage: "Invalid email format.")
         } else {
             delegate?.didUpdateEmailValidation(isValid: true, errorMessage: nil)
         }
