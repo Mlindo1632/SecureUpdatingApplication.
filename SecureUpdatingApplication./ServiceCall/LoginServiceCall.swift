@@ -12,12 +12,18 @@ protocol LoginServiceCallProtocol {
 }
 
 struct LoginServiceCall: LoginServiceCallProtocol {
+    private let networkManager: NetworkManagerProtocol
+    
+    init(networkManager: NetworkManagerProtocol = NetworkManager.shared) {
+           self.networkManager = networkManager
+       }
+    
     func loginUser(email: String, password: String) {
         let endpoint = SecureAPIReader.readValue(key: "ReqResLoginDetails")!
         
         let parameters: [String: Any] = ["email": email, "password": password]
         
-        NetworkManager.shared.request(endpoint: endpoint,
+                networkManager.request(endpoint: endpoint,
                                       method: .post,
                                       parameters: parameters,
                                       headers: nil
