@@ -34,7 +34,7 @@ class LoginViewModel {
         if email.isEmpty {
             delegate?.didUpdateEmailValidation(isValid: false, errorMessage: "Email cannot be empty.")
         } else if !email.hasSuffix("@reqres.in") {
-            delegate?.didUpdateEmailValidation(isValid: false, errorMessage: "Please enter a vaild email address")
+            delegate?.didUpdateEmailValidation(isValid: false, errorMessage: "Please enter a valid email address")
         } else {
             delegate?.didUpdateEmailValidation(isValid: true, errorMessage: nil)
         }
