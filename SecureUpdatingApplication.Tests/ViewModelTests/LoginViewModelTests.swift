@@ -6,30 +6,77 @@
 //
 
 import XCTest
+@testable import SecureUpdatingApplication_
 
 final class LoginViewModelTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    var viewModel: LoginViewModel!
+    var mockServiceCall: MockLoginServiceCall!
+    var mockDelegate: MockLoginViewModelDelegate!
+    
+    override func setUp() {
+        mockServiceCall = MockLoginServiceCall()
+        mockDelegate = MockLoginViewModelDelegate()
+        viewModel = LoginViewModel(loginServiceCallProtocol: mockServiceCall)
+        viewModel.delegate = mockDelegate
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    override func tearDown() {
+        viewModel = nil
+        mockServiceCall = nil
+        mockDelegate = nil
+        super.tearDown()
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func testEmptyEmailShouldFailValidation() {
+            viewModel.email = ""
+            XCTAssertEqual(mockDelegate.emailValidation?.isValid, false)
+            XCTAssertEqual(mockDelegate.emailValidation?.errorMessage, "Email cannot be empty.")
         }
+    func testEmailShouldFailValidation() {
+        viewModel.email = "James.Fredricks@gmail.com"
+        XCTAssertEqual(mockDelegate.emailValidation?.isValid, false)
+        XCTAssertEqual(mockDelegate.emailValidation?.errorMessage, "Please enter a valid email address")
     }
-
+    
+    func testEmailShouldPassValidation() {
+        viewModel.email = "JamesFredricks@reqres.in"
+        XCTAssertEqual(mockDelegate.emailValidation?.isValid, true)
+        XCTAssertNil(mockDelegate.emailValidation?.errorMessage)
+    }
+    
+    func testEmptyPasswordShouldFailVallidation() {
+        viewModel.password = ""
+        XCTAssertEqual(mockDelegate.passwordValidation?.isValid, false)
+        XCTAssertEqual(mockDelegate.passwordValidation?.errorMessage, "Password cannot be empty")
+    }
+    
+    func testPasswordShouldFailValidation() {
+        viewModel.password = "1234"
+        XCTAssertEqual(mockDelegate.passwordValidation?.isValid, false)
+        XCTAssertEqual(mockDelegate.passwordValidation?.errorMessage, "Password needs to be atleast 6 characters.")
+    }
+    
+    func testPasswordShouldPassValidation() {
+        viewModel.password = "123456"
+        XCTAssertEqual(mockDelegate.passwordValidation?.isValid, true)
+        XCTAssertNil(mockDelegate.passwordValidation?.errorMessage)
+    }
+    
+    func testInvalidFormWhenEmailIsInvalid() {
+        viewModel.email = "JamesFredricks"
+        viewModel.password = "123456"
+        XCTAssertEqual(mockDelegate.formValidation, false)
+    }
+    
+    func testInvalidFormWhenPasswordIsTooShort() {
+        viewModel.email = "JamesFredricks@reqres.in"
+        viewModel.password = "12345"
+        XCTAssertEqual(mockDelegate.formValidation, false)
+    }
+    
+    func testFormWhenEmailAndPasswordAreValid() {
+        viewModel.email = "JamesFredricks@reqres.in"
+        viewModel.password = "123456"
+        XCTAssertEqual(mockDelegate.formValidation, true)
+    }
 }
