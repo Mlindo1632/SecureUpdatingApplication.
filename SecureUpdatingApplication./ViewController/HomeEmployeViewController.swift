@@ -12,5 +12,6 @@ class EmployeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
+        SecureToast.showToast(message: "Successfully Logged in", backgroundColour: .green, viewController: self)
     }
 }
